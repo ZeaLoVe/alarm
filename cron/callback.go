@@ -2,8 +2,8 @@ package cron
 
 import (
 	"fmt"
-	"github.com/open-falcon/alarm/api"
-	"github.com/open-falcon/alarm/redis"
+	"github.com/ZeaLoVe/alarm/api"
+	"github.com/ZeaLoVe/alarm/redis"
 	"github.com/open-falcon/common/model"
 	"github.com/toolkits/net/httplib"
 	"strings"
@@ -13,19 +13,19 @@ import (
 func HandleCallback(event *model.Event, action *api.Action) {
 
 	teams := action.Uic
-	phones := []string{}
 	mails := []string{}
+	ims := []string{}
 
 	if teams != "" {
-		phones, mails = api.ParseTeams(teams)
-		smsContent := GenerateSmsContent(event)
+		_, mails, ims = api.ParseTeams(teams)
+		imsmsContent := GenerateIMSmsContent(event)
 		mailContent := GenerateMailContent(event)
 		if action.BeforeCallbackSms == 1 {
-			redis.WriteSms(phones, smsContent)
+			redis.WriteIMSms(ims, imsmsContent)
 		}
 
 		if action.BeforeCallbackMail == 1 {
-			redis.WriteMail(mails, smsContent, mailContent)
+			redis.WriteMail(mails, imsmsContent, mailContent)
 		}
 	}
 
@@ -33,7 +33,7 @@ func HandleCallback(event *model.Event, action *api.Action) {
 
 	if teams != "" {
 		if action.AfterCallbackSms == 1 {
-			redis.WriteSms(phones, message)
+			redis.WriteIMSms(ims, message)
 		}
 
 		if action.AfterCallbackMail == 1 {

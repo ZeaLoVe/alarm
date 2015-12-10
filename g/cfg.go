@@ -13,8 +13,10 @@ type HttpConfig struct {
 }
 
 type QueueConfig struct {
-	Sms  string `json:"sms"`
-	Mail string `json:"mail"`
+	Sms   string `json:"sms"`
+	Mail  string `json:"mail"`
+	IMSms string `json:"im"`
+	Phone string `json:"phone"`
 }
 
 type RedisConfig struct {

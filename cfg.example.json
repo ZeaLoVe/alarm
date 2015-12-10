@@ -3,11 +3,13 @@
     "uicToken": "",
     "http": {
         "enabled": true,
-        "listen": "0.0.0.0:9912"
+        "listen": "0.0.0.0:6060"
     },
     "queue": {
         "sms": "/sms",
-        "mail": "/mail"
+        "mail": "/mail",
+		"im":"/im",
+		"phone":"/phone"
     },
     "redis": {
         "addr": "127.0.0.1:6379",

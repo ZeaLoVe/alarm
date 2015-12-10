@@ -2,7 +2,7 @@ package api
 
 import (
 	"fmt"
-	"github.com/open-falcon/alarm/g"
+	"github.com/ZeaLoVe/alarm/g"
 	"github.com/toolkits/container/set"
 	"github.com/toolkits/net/httplib"
 	"log"
@@ -15,6 +15,8 @@ type User struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
 	Phone string `json:"phone"`
+	IM    string `json:"im"`
+	QQ    string `json:"qq"`
 }
 
 type UsersWrap struct {
@@ -79,19 +81,21 @@ func GetUsers(teams string) map[string]*User {
 }
 
 // return phones, emails
-func ParseTeams(teams string) ([]string, []string) {
+func ParseTeams(teams string) ([]string, []string, []string) {
 	if teams == "" {
-		return []string{}, []string{}
+		return []string{}, []string{}, []string{}
 	}
 
 	userMap := GetUsers(teams)
+	imSet := set.NewStringSet()
 	phoneSet := set.NewStringSet()
 	mailSet := set.NewStringSet()
 	for _, user := range userMap {
+		imSet.Add(user.IM)
 		phoneSet.Add(user.Phone)
 		mailSet.Add(user.Email)
 	}
-	return phoneSet.ToSlice(), mailSet.ToSlice()
+	return phoneSet.ToSlice(), mailSet.ToSlice(), imSet.ToSlice()
 }
 
 func CurlUic(team string) []*User {

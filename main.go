@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/open-falcon/alarm/cron"
-	"github.com/open-falcon/alarm/g"
-	"github.com/open-falcon/alarm/http"
+	"github.com/ZeaLoVe/alarm/cron"
+	"github.com/ZeaLoVe/alarm/g"
+	"github.com/ZeaLoVe/alarm/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -34,8 +34,6 @@ func main() {
 
 	go cron.ReadHighEvent()
 	go cron.ReadLowEvent()
-	go cron.CombineSms()
-	go cron.CombineMail()
 
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)

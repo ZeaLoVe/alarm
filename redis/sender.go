@@ -2,11 +2,16 @@ package redis
 
 import (
 	"encoding/json"
-	"github.com/open-falcon/alarm/g"
-	"github.com/open-falcon/sender/model"
+	"github.com/ZeaLoVe/alarm/g"
+	"github.com/ZeaLoVe/go-utils/model"
 	"log"
 	"strings"
 )
+
+//sms, short message by phone
+//imsms, im message by im(it's depends)
+//phone, phone message by phone call(api of nexmo)
+//mail, mail message by smtp
 
 func LPUSH(queue, message string) {
 	rc := g.RedisConnPool.Get()
@@ -15,6 +20,24 @@ func LPUSH(queue, message string) {
 	if err != nil {
 		log.Println("LPUSH redis", queue, "fail:", err, "message:", message)
 	}
+
+	//	if g.Config().Debug {
+	//		log.Println("LPUSH redis", queue, "success:", message)
+	//	}
+}
+
+func WriteIMSmsModel(imsms *model.IMSms) {
+	if imsms == nil {
+		return
+	}
+
+	bs, err := json.Marshal(imsms)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	LPUSH(g.Config().Queue.IMSms, string(bs))
 }
 
 func WriteSmsModel(sms *model.Sms) {
@@ -45,6 +68,29 @@ func WriteMailModel(mail *model.Mail) {
 	LPUSH(g.Config().Queue.Mail, string(bs))
 }
 
+func WritePhoneModel(phone *model.Phone) {
+	if phone == nil {
+		return
+	}
+
+	bs, err := json.Marshal(phone)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	LPUSH(g.Config().Queue.Phone, string(bs))
+}
+
+func WriteIMSms(tos []string, content string) {
+	if len(tos) == 0 {
+		return
+	}
+
+	imsms := &model.IMSms{Tos: strings.Join(tos, ","), Content: content}
+	WriteIMSmsModel(imsms)
+}
+
 func WriteSms(tos []string, content string) {
 	if len(tos) == 0 {
 		return
@@ -61,4 +107,13 @@ func WriteMail(tos []string, subject, content string) {
 
 	mail := &model.Mail{Tos: strings.Join(tos, ","), Subject: subject, Content: content}
 	WriteMailModel(mail)
+}
+
+func WritePhone(tos []string, content string) {
+	if len(tos) == 0 {
+		return
+	}
+
+	phone := &model.Phone{Tos: strings.Join(tos, ","), Content: content}
+	WritePhoneModel(phone)
 }

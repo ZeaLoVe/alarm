@@ -16,3 +16,19 @@ type SmsDto struct {
 	Phone    string `json:"phone"`
 	Status   string `json:"status"`
 }
+
+type IMSmsDto struct {
+	Priority int    `json:"priority"`
+	Metric   string `json:"metric"`
+	Content  string `json:"content"`
+	IM       string `json:"im"`
+	Status   string `json:"status"`
+}
+
+type PhoneDto struct {
+	Priority int    `json:"priority"`
+	Metric   string `json:"metric"`
+	Content  string `json:"content"`
+	Phone    string `json:"phone"`
+	Status   string `json:"status"`
+}
