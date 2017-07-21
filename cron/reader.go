@@ -2,11 +2,13 @@ package cron
 
 import (
 	"encoding/json"
+	"log"
+	"time"
+
+	"github.com/ZeaLoVe/alarm/db"
 	"github.com/ZeaLoVe/alarm/g"
 	"github.com/garyburd/redigo/redis"
 	"github.com/open-falcon/common/model"
-	"log"
-	"time"
 )
 
 func ReadHighEvent() {
@@ -67,6 +69,9 @@ func popEvent(queues []string) (*model.Event, error) {
 		log.Printf("parse alarm event fail: %v", err)
 		return nil, err
 	}
+
+	//记录到db
+	db.RecordEvent(&event)
 
 	if g.Config().Debug {
 		log.Println("======>>>>")

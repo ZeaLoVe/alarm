@@ -3,12 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/ZeaLoVe/alarm/cron"
-	"github.com/ZeaLoVe/alarm/g"
-	"github.com/ZeaLoVe/alarm/http"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/ZeaLoVe/alarm/cron"
+	"github.com/ZeaLoVe/alarm/db"
+	"github.com/ZeaLoVe/alarm/g"
+	"github.com/ZeaLoVe/alarm/http"
 )
 
 func main() {
@@ -29,6 +31,8 @@ func main() {
 
 	g.ParseConfig(*cfg)
 	g.InitRedisConnPool()
+
+	db.Init()
 
 	go http.Start()
 

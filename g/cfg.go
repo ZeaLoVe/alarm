@@ -2,9 +2,10 @@ package g
 
 import (
 	"encoding/json"
-	"github.com/toolkits/file"
 	"log"
 	"sync"
+
+	"github.com/toolkits/file"
 )
 
 type HttpConfig struct {
@@ -34,13 +35,21 @@ type ApiConfig struct {
 	Links  string `json:"links"`
 }
 
+type HostsConfig struct {
+	Api_url  string `json:"api"`
+	Interval int    `json:"interval"`
+}
+
 type GlobalConfig struct {
 	Debug    bool         `json:"debug"`
 	UicToken string       `json:"uicToken"`
+	Database string       `json:"database"`
+	MaxIdle  int          `json:"maxIdle"`
 	Http     *HttpConfig  `json:"http"`
 	Queue    *QueueConfig `json:"queue"`
 	Redis    *RedisConfig `json:"redis"`
 	Api      *ApiConfig   `json:"api"`
+	Hosts    *HostsConfig `json:"hosts"`
 }
 
 var (
